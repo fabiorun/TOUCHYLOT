@@ -1,0 +1,388 @@
+﻿<Window
+    x:Class="TOUCH_BOX.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:WpfKb="clr-namespace:WpfKb.Controls;assembly=WpfKb" 
+    xmlns:BAR="clr-namespace:BAR_controls;assembly=BAR_controls"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:local="clr-namespace:TOUCH_BOX"
+    xmlns:materialMenu="clr-namespace:MaterialMenu;assembly=MaterialMenu"
+    Title="Touch Lot"     
+    x:Name="TestWindow"
+    Loaded="TestWindow_Loaded"
+    Background="#FFD1D4DC" 
+    Width="1024"
+    Height="768"
+    Top="0" SizeChanged="TestWindow_SizeChanged" 
+    WindowState="Maximized"
+    >
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseQuesstionarioCommandHandler" />
+    </Window.CommandBindings>
+    <Window.Resources>
+        <local:YesNoToBooleanConverter  x:Key="YesNoToBooleanConverter" />
+        <local:NotYesNoToBooleanConverter  x:Key="NotYesNoToBooleanConverter" />
+        <Style x:Key="BorderValue" TargetType="Border" >
+            <Setter Property="BorderBrush" Value="#FF3399FF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style x:Key="FieldValue" TargetType="TextBlock" >
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="#FF3399FF" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="Padding" Value="20,1,20,1" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+            
+        <Style x:Key="FieldHead" TargetType="TextBlock" >
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" /> 
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="main_grid" Margin="1,1,1,1" Height="Auto"   >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*"  />
+        </Grid.RowDefinitions>
+        <materialMenu:SideMenu Grid.Row="0" Grid.RowSpan="3"  HorizontalAlignment="Left" x:Name="CustomMenu"
+                               MenuWidth="300" Theme="None" State="Hidden"
+                               ButtonBackground="White" ButtonHover="LightGray" 
+                               ShadowBackground="LightGray" Loaded="CustomMenu_Loaded">
+            <materialMenu:SideMenu.Menu>
+                <ScrollViewer VerticalScrollBarVisibility="Hidden" Background="White">
+                    <StackPanel Orientation="Vertical">
+                        <Border Background="#0073b6" Height="85">
+                            <Grid Margin="5">
+                                <TextBox Height="75" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Bottom" FontFamily="Calibri" FontSize="21" Foreground="White" FontWeight="Bold"  >Touch Lot</TextBox>
+                            </Grid>
+                        </Border>
+                        <materialMenu:MenuButton Text="Change Lot" BGColor="DarkRed"   MouseDown="Menu_OnMouseDown_changelot" ></materialMenu:MenuButton>
+                        <materialMenu:MenuButton Text="Complete"     BGColor="Navy"      MouseDown="Menu_OnMouseDown_completa" ></materialMenu:MenuButton>
+                        <materialMenu:MenuButton Text="Audit"        BGColor="#FF3399FF" MouseDown="Menu_OnMouseDown_audit" ></materialMenu:MenuButton>
+                        <materialMenu:MenuButton Text="Quit"         BGColor="CadetBlue" MouseDown="Menu_OnMouseDown_quit" ></materialMenu:MenuButton>
+                        <materialMenu:MenuButton Text="Storage"      BGColor="Green"     MouseDown="Menu_OnMouseDown_storage" ></materialMenu:MenuButton>
+                    </StackPanel>
+                </ScrollViewer>
+            </materialMenu:SideMenu.Menu>
+        </materialMenu:SideMenu>
+
+        <Border Grid.Row="0"  >
+            <Grid  Background="#0073b6" Height="55" HorizontalAlignment="Stretch"   >
+                <Grid.RowDefinitions>
+                    <RowDefinition ></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" ></ColumnDefinition>
+                    <ColumnDefinition Width="100" ></ColumnDefinition>
+                    <ColumnDefinition Width="Auto" ></ColumnDefinition>
+                    <ColumnDefinition Width="100" ></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"   Margin="3" Click="ButtonBase_OnClick">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Height="35" Width="35" HorizontalAlignment="Right"
+                                Background="Transparent" >
+                                <Image Source="Resources/Dark1.png" Margin="3"></Image>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="txt_utente_H" Style="{StaticResource FieldHead}" >user:</TextBlock>
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource BorderValue}" >
+                    <TextBlock x:Name="txt_utente"  Style="{StaticResource FieldValue}" >user value</TextBlock>
+                </Border>
+                <TextBlock Grid.Row="0" Grid.Column="3" x:Name="txt_qty_H"    Style="{StaticResource FieldHead}" >qty:</TextBlock>
+                <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource BorderValue}" >
+                    <TextBlock x:Name="txt_qty"     Style="{StaticResource FieldValue}" >qty value</TextBlock>
+                </Border>
+
+                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="txt_lotto_H"  Style="{StaticResource FieldHead}" >lot:</TextBlock>
+                <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource BorderValue}" >
+                    <TextBlock x:Name="txt_lotto"   Style="{StaticResource FieldValue}" >lot value</TextBlock>
+                </Border>
+                <TextBlock Grid.Row="1" Grid.Column="3" x:Name="txt_coda_H"   Style="{StaticResource FieldHead}" >article:</TextBlock>
+                <Border Grid.Row="1" Grid.Column="4"  Style="{StaticResource BorderValue}" >
+                    <TextBlock x:Name="txt_coda"    Style="{StaticResource FieldValue}" >article value</TextBlock>
+                </Border>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Background="#0073b6" BorderBrush="DarkGray" BorderThickness="0,1,0,2" Padding="1"  >
+            <Grid  Margin="0,0,0,0" HorizontalAlignment="Stretch"   >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"  ></ColumnDefinition>
+                    <ColumnDefinition Width="250"   ></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Width="250" Margin="0,0,0,0" >
+                    <TextBlock FontSize="15" FontFamily="Arial" Margin="3"  x:Name="txt_terminale_H" FontWeight="Bold" Foreground="White" >terminal:</TextBlock>
+                    <TextBlock FontSize="15" FontFamily="Arial" Margin="3" Padding="3"  x:Name="txt_terminale" FontWeight="Bold"  Foreground="White" TextDecorations="Underline" HorizontalAlignment="Stretch" >terminal value</TextBlock>
+                    <TextBlock FontSize="15" FontFamily="Arial" Margin="3"  x:Name="txt_totale_H" FontWeight="Bold"  Foreground="White"  > TOTAL:</TextBlock>
+                    <TextBlock FontSize="15" FontFamily="Arial" Margin="3" Padding="3" x:Name="txt_totale" FontWeight="Bold"  Foreground="White" TextDecorations="Underline"   HorizontalAlignment="Stretch"  >total value</TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="1"  x:Name="txt_file_closed" Margin="3,3,3,3" Orientation="Horizontal" HorizontalAlignment="Center" Background="Yellow"  >
+                    <TextBlock Padding="3,3,3,3" Foreground="Navy" FontSize="18"  FontWeight="Bold"   HorizontalAlignment="Center" VerticalAlignment="Center">CLOSED LOT</TextBlock>
+                    <Button x:Name="btn_riapri" Margin="10,2,2,2" Padding="2,2,2,2" Width="70" Height="30" Background="Navy"    Foreground="white" FontWeight="Bold"    HorizontalAlignment="Center" VerticalAlignment="Center" Click="btn_riapri_Click" >reopen it</Button>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" >
+                    <ToggleButton Name="button_colore" Width="200" Height="27" Content="SELECT LOT COLOR" Padding="3,1,1,3" FontWeight="Bold" Margin="0,0,0,0" BorderBrush="White" >
+                    </ToggleButton>
+                </StackPanel>
+            </Grid>
+
+        </Border>
+        <ScrollViewer Grid.Row="2"  x:Name="scroll_content" Background="#FFE6E6E6"    >
+            <ItemsControl  x:Name="TipoScartoList"     >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DataTemplate.Resources>
+                           <Storyboard x:Key="ItemAnimation" AutoReverse="False">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="myLotWaste" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1" />
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="myLotWaste" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1" />
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="myLotWaste" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </DataTemplate.Resources>
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource ItemAnimation}" />
+                            </EventTrigger>
+                        </DataTemplate.Triggers> 
+                            <BAR:ScartoBox  Margin="3"  BoxColore="{Binding BoxColore}"   x:Name="myLotWaste" RenderTransformOrigin="0.5,0"   Opacity="0"
+                                        TipoScartoName="{Binding TipoNome}"  
+                                        TipoScartoID="{Binding TipoID}"  
+                                        TipoScartoValue="{Binding TipoValue,Mode=TwoWay}" 
+                                        ShowBox="{Binding ShowBox}" 
+                                        Altezza="{Binding ScreenTypeBox,Mode=TwoWay}"
+                                        ScartoBoxGotFocus="ScartoBox_ScartoBoxGotFocus" 
+                                        ScartoBoxIncrease="ScartoBox_incrementa_Click"   
+                                        ScartoBoxDecrease="ScartoBox_decrementa_Click"
+                                        ScartoBoxTextChanged="ScartoBox_TextChanged">
+                            <BAR:ScartoBox.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                </TransformGroup>
+                            </BAR:ScartoBox.RenderTransform>
+                            </BAR:ScartoBox> 
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <WpfKb:FloatingTouchScreenKeypad
+            x:Name="Keyboard"
+            IsOpen="False"
+            IsAllowedToFade="False"
+            Width="500"
+            Height="400"
+            PlacementTarget="{Binding ElementName=TestWindow}"
+            Placement="Center"
+            AreAnimationsEnabled="False" />
+
+        <Popup x:Name="popup_riapri" IsOpen="False" Placement="Center" 
+           PopupAnimation="Fade" AllowsTransparency="True"  Height="{Binding ActualHeight, ElementName=main_grid}"     Width="{Binding ActualWidth, ElementName=main_grid}"  >
+            <Border Background="AliceBlue" BorderBrush="Purple" BorderThickness="2" Margin="3,3,3,3"  >
+                <Grid Width="500" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"></RowDefinition>
+                        <RowDefinition Height="70"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="455"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Padding="3,3,3,3" Foreground="Navy" FontSize="20"  FontWeight="Bold"   HorizontalAlignment="Center" VerticalAlignment="Center">This lot is completed</TextBlock>
+                    <TextBlock x:Name="lb_can_be_open" Grid.Column="0" Grid.Row="1" Padding="3,3,3,3" Foreground="Orange" FontSize="17"  FontWeight="Bold"   HorizontalAlignment="Center" VerticalAlignment="Center">further change can be saved by reopening the lot</TextBlock>
+                    <Button Grid.Column="0" Grid.Row="2" x:Name="btn_riapri_pop" Margin="10,35,10,10"  Padding="2,2,2,2" Width="198" Height="80" Background="Navy"    Foreground="white" FontWeight="Bold"    HorizontalAlignment="Center" VerticalAlignment="Center" Click="btn_riapri_Click" >REOPEN LOT</Button>
+                    <Button Grid.Row="0" Grid.Column="1"  x:Name="btn_close_pop" Margin="2,2,2,2"  Padding="0,0,0,0" Height="40" Background="Gray"    Foreground="Red" FontWeight="Bold" VerticalAlignment="Top"   Click="btn_close_pop_Click" >X</Button>
+                </Grid>
+            </Border>
+        </Popup>
+        <Popup x:Name="popup_colori" IsOpen="{Binding IsChecked, ElementName=button_colore}" StaysOpen="True"   
+               Placement="Center"   PopupAnimation="Fade"  
+               Width="{Binding Path=ActualWidth, ElementName=main_grid}" Height="{Binding Path=ActualHeight, ElementName=main_grid}"   >
+            <Border Background="#a4aab7" Margin="3,3,3,3" >
+                <Grid  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"  >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250" ></ColumnDefinition>
+                        <ColumnDefinition Width="50"  ></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="75" ></RowDefinition>
+                        <RowDefinition Height="75" ></RowDefinition>
+                        <RowDefinition Height="75" ></RowDefinition>
+                        <RowDefinition Height="75" ></RowDefinition>
+                        <RowDefinition Height="75" ></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" Margin="2,2,2,2" Content="RED"  x:Name="btn_grup_red"    FontSize="18" FontWeight="Bold" Background="red"    CommandParameter="GR" Click="btn_colore_Click" Foreground="White" ></Button>
+                    <Button Grid.Column="0" Grid.Row="1" Margin="2,2,2,2" Content="GREEN"  x:Name="btn_grup_verde"  FontSize="18" FontWeight="Bold" Background="Green"  CommandParameter="GV" Click="btn_colore_Click" ></Button>
+                    <Button Grid.Column="0" Grid.Row="2" Margin="2,2,2,2" Content="YELLOW" x:Name="btn_grup_giallo" FontSize="18" FontWeight="Bold" Background="Yellow" CommandParameter="GG" Click="btn_colore_Click" ></Button>
+                    <Button Grid.Column="0" Grid.Row="3" Margin="2,2,2,2" Content="BLUE"   x:Name="btn_grup_blue"   FontSize="18" FontWeight="Bold" Background="Navy"   CommandParameter="GB" Click="btn_colore_Click" Foreground="White" ></Button>
+                    <TextBlock Grid.Column="0" Grid.Row="4" Margin="2,2,2,2" x:Name="txt_tot" FontWeight="Bold" Background="#a4aab7"  FontSize="15"  HorizontalAlignment="Center" VerticalAlignment="Center">TOTALE</TextBlock>
+
+                    <TextBlock Grid.Column="1" Grid.Row="0" Margin="2,2,2,2" Padding="0,0,0,0" x:Name="txt_tot_red" FontWeight="Bold" Background="#a4aab7" FontSize="15"    HorizontalAlignment="Center" VerticalAlignment="Center" >0</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" Padding="0,0,0,0" x:Name="txt_tot_green" FontWeight="Bold" Background="#a4aab7" FontSize="15"  HorizontalAlignment="Center" VerticalAlignment="Center">0</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Margin="2,2,2,2" Padding="0,0,0,0" x:Name="txt_tot_yellow" FontWeight="Bold" Background="#a4aab7" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">0</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="3" Margin="2,2,2,2" Padding="0,0,0,0" x:Name="txt_tot_blue" FontWeight="Bold" Background="#a4aab7"  FontSize="15"  HorizontalAlignment="Center" VerticalAlignment="Center">0</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="4" Margin="2,2,2,2" Padding="0,0,0,0" x:Name="txt_tot_all" FontWeight="Bold" Background="#a4aab7"  FontSize="15"  HorizontalAlignment="Center" VerticalAlignment="Center">0</TextBlock>
+                </Grid>
+            </Border>
+        </Popup>
+        <Popup x:Name="popup_domande_lotto"  
+               Placement="Center"   PopupAnimation="Fade" Width="{Binding Path=ActualWidth, ElementName=main_grid}" Height="{Binding Path=ActualHeight, ElementName=main_grid}"   >
+            <Border Background="#a4aab7" Margin="3,3,3,3" >
+                <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,0" Width="800"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" ></RowDefinition>
+                        <RowDefinition Height="1*" ></RowDefinition>
+                        <RowDefinition Height="50" ></RowDefinition>
+                        <RowDefinition Height="50" ></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="2,2,2,2"  HorizontalAlignment="Stretch" Background="White" >
+                        <TextBlock Padding="3,3,3,3"  Foreground="#FF3399FF" x:Name="txt_title_questionario" FontWeight="Bold"   FontSize="19"  HorizontalAlignment="Center" VerticalAlignment="Center">Audit about the Lot</TextBlock>
+                    </StackPanel>
+
+                    <ListView x:Name="ListaDomande"  Grid.Row="1"  HorizontalAlignment="Stretch" Margin="3,3,3,3"   VerticalAlignment="Top" FontSize="20" Width="800" Height="300" >
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Height" Value="50" />
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Domanda"  DisplayMemberBinding="{Binding Testo}"   Width="400"   />
+                                <GridViewColumn Header="Risposta" Width="300" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                                <RadioButton HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="40,3,40,3" Padding="3,3,3,3" x:Name="radio_si" Content="Si"  GroupName="{Binding ID_domanda}" IsChecked="{Binding Risposta,Mode=TwoWay, Converter={StaticResource YesNoToBooleanConverter}}" ></RadioButton>
+                                                <RadioButton HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,3,40,3" Padding="3,3,3,3" x:Name="radio_no" Content="No"  GroupName="{Binding ID_domanda}" IsChecked="{Binding Risposta,Mode=TwoWay, Converter={StaticResource NotYesNoToBooleanConverter}}" ></RadioButton>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+                        <Button Name="btn_start" Width="200" Margin="5,5,5,5"     Foreground="White" FontWeight="Bold" FontFamily="verdana" FontSize="17" Click="btn_procedi_Click"   >
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Content" Value="APPLY"></Setter>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="Border" CornerRadius="2" BorderThickness="1" Background="#FF3399FF" BorderBrush="{x:Static SystemColors.ControlDarkDarkBrush}">
+                                                    <ContentPresenter  Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsKeyboardFocused" Value="True">
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsDefaulted" Value="True">
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Name="btn_question_close" Grid.Row="2" Width="200" Margin="5,5,5,5"   Foreground="#FF3399FF" FontWeight="Bold" FontFamily="verdana" FontSize="17" Command="ApplicationCommands.Close" 
+                            Content="Close audit"  >
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="Border" CornerRadius="2" BorderThickness="1" Background="White" BorderBrush="{x:Static SystemColors.ControlDarkDarkBrush}">
+                                                    <ContentPresenter  Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsKeyboardFocused" Value="True">
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsDefaulted" Value="True">
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                                                        <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                    <Border x:Name="questionario_warning"  Margin="2,2,2,2" Grid.Row="3"  BorderBrush="#FF3399FF" BorderThickness="1" Visibility="Collapsed" >
+                        <StackPanel HorizontalAlignment="Stretch" Background="#FFFFFFD2" >
+                            <TextBlock Padding="3,3,3,3"  Foreground="#FF3399FF" FontWeight="Bold"   FontSize="19"  HorizontalAlignment="Center" VerticalAlignment="Center">Warning: all the qestions are mandatory!</TextBlock>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+
+
+
+
+</Window>
