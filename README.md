@@ -3,6 +3,7 @@
 TOUCHYLOT is a WPF/C#/Sqlserver application.
 
 I published it on Github as an example of use of the popular WPF Touch Screen Keyboard with some little customizution.
+https://wpfkb.codeplex.com/
 
 The original purpuose is to let Workers to report manufacturing product difect in the quality process for a glasses industry.
 
