@@ -2,6 +2,8 @@
 
 TOUCHYLOT is a WPF/C#/Sqlserver application.
 
+Here you can find a short video showing how it looks like : https://www.youtube.com/watch?v=YKTiBH48K3s
+
 I published it on Github as an example of use of the popular WPF Touch Screen Keyboard with some little customizution.
 https://wpfkb.codeplex.com/
 
