@@ -36,6 +36,16 @@ Operator: 123
 
 LOT:  AS123
 
+<img src="http://www.adessofoto.com/touch/TOUCHYLOT_login.JPG" />
+
+<img src="http://www.adessofoto.com/touch/TOUCHYLOT_main_1.JPG" />
+
+<img src="http://www.adessofoto.com/touch/TOUCHYLOT_main_2.JPG" />
+
+<img src="http://www.adessofoto.com/touch/TOUCHYLOT_sidebar_1.JPG" />
+
+<img src="http://www.adessofoto.com/touch/TOUCHYLOT_lot_color.JPG" />
+
 
 
 
